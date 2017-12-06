@@ -45,12 +45,15 @@ articles = page_soup.find_all('article')
 # Phone Number Class
 phone_number_class = 'showPhoneNumber mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--yellow mbs'
 
-# Get the price and the image link of the article matching the search term
-
+# get number from image url
+def get_number(x):
+    phone_image = "https://www.tayara.tn/phone/"+x+"?type=image"
+    response_img = requests.get(phone_image)
+    phone_number = pytesseract.image_to_string(Image.open(BytesIO(response_img.content)), lang = 'eng')
+    return phone_number
 
 
 res = []
-phone_array = []
 for article in articles:
     if article.find('img') is not None:
         detail_soup = soup(requests.get(article.a['href']).content, 'html.parser')
@@ -62,12 +65,6 @@ for article in articles:
         res.append([img, price, phone_number])
 
 
-        
-def get_number(x):
-    phone_image = "https://www.tayara.tn/phone/"+x+"?type=image"
-    response_img = requests.get(phone_image)
-    phone_number = pytesseract.image_to_string(Image.open(BytesIO(response_img.content)), lang = 'eng')
-    return phone_number
 
 
 # Create Dataframe from the result  array with columns Image Link and Price
@@ -99,7 +96,7 @@ msgRoot.preamble = 'This is a multi-part message in MIME format.'
 texti = ''
 
 for index , row in df.iterrows():
-    texti += 'Price '+str(row['Price'])+'  :  <img src='+row['Image Link']+'> <br> Phone Number :'+str(row['Phone Number'])+'<br>'
+    texti += '<div><b>Price</b> '+str(row['Price'])+'  :  <img src='+row['Image Link']+'> <br><b> Phone Number <b> :'+str(row['Phone Number'])+'<br></div>'
     
 
 
