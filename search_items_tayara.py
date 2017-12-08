@@ -116,6 +116,19 @@ def send_res(term="iPhone-6"):
 	server.sendmail(strFrom, strTo, msgRoot.as_string())
 	server.quit()
 
-term = '-'.join(sys.argv[1:])
+if __name__ == "__main__":
 
-send_res(term)
+	try:
+		sys.argv[1]
+		term = '-'.join(sys.argv[1:])
+	
+	except : print(" [*] Hint: python search_items_tayara.py <search term>"); exit(0)
+		
+	else:
+		send_res(term)
+
+
+
+
+
+
