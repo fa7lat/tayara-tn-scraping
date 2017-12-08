@@ -1,7 +1,6 @@
 from login_pswd import strFrom, strTo, pswd
 
 import sys
-import re
 import time
 
 import smtplib
@@ -118,7 +117,7 @@ def send_res(term="iPhone-6"):
 		texti += """\
 			<div style="overflow:auto;margin-left:30px;" >
 			<b>Price</b> : {price}:
-			<b> Phone Number </b> : {phone} <br>
+			<b> Phone Number </b> : {phone}<br>
 			<img src= "{image}">
 			</div>
 
