@@ -1,7 +1,7 @@
 from login_pswd import strFrom, strTo, pswd
 
 import sys
-
+import re
 import time
 
 import smtplib
@@ -32,6 +32,10 @@ import numpy as np
 
 def send_res(term="iPhone-6"):
 
+
+	"""Fetch account information from a given Twitter profile"""	    
+
+
 	#term = term.replace(' ', '-')
 	url = "https://www.tayara.tn/fr/bizerte/toutes_les_categories/"+quote("à_vendre")+"/"+term
 
@@ -61,14 +65,17 @@ def send_res(term="iPhone-6"):
 	for article in articles:
 	    if article.find('img') is not None:
 	        detail_soup = soup(requests.get(article.a['href']).content, 'html.parser')
-	        phone_number_link = detail_soup.find('a',{'class':phone_number_class})['data-on-click']
-	        phone_number = get_number(phone_number_link)
+
+	        try:
+	        	phone_number_link = detail_soup.find('a',{'class':phone_number_class})['data-on-click']
+	        	phone_number = get_number(phone_number_link)
+
+	        except : phone_number = "0000000"
+	              
 	                        
 	        img = article.find('img')['data-blazy']
 	        price = article.find('span').text.strip()
 	        res.append([img, price, phone_number])
-
-
 
 
 	# Create Dataframe from the result  array with columns Image Link and Price
@@ -78,16 +85,19 @@ def send_res(term="iPhone-6"):
 
 	df = pd.DataFrame(res,columns=['Image Link','Price','Phone Number'])
 	df['Price'] = df['Price'].str.replace('\s+','')
-	df['Phone Number'] = df['Phone Number'].str.replace('\D+','')
+	df['Phone Number'] = df['Phone Number'].str.replace('\D','')
 
 	df = df[df['Price'].apply(lambda x:x.isnumeric())]
-	#df ['Price'] = df['Price'].astype(str).astype(float)
 
-	#df = df [(df['Price'] > 100) & (df['Price'] < 1000)]
+	try: df ['Price'] = df['Price'].astype(str).astype(float)
+
+	except: df ['Price'] = df['Price']
+
+	now = time.strftime("%c")
 
 	# Sending Email 
 
-	now = time.strftime("%c")
+	
 
 	msgRoot = MIMEMultipart('related')
 	msgRoot['Subject'] = term +' Search ' +now
@@ -100,8 +110,19 @@ def send_res(term="iPhone-6"):
 	texti = ''
 
 	for index , row in df.iterrows():
-	    texti += '<div><b>Price</b> '+str(row['Price'])+'  :  <img src='+row['Image Link']+'> <br><b> Phone Number <b> :'+str(row['Phone Number'])+'<br></div>'
-	    
+
+
+		price = str(row['Price'])
+		image = str(row['Image Link'])
+		phone = str(row['Phone Number'])
+		texti += """\
+			<div style="overflow:auto;margin-left:30px;" >
+			<b>Price</b> : {price}:
+			<b> Phone Number </b> : {phone} <br>
+			<img src= "{image}">
+			</div>
+
+				""".format(**locals())
 
 
 	final_text = '<b> Search for'+str(term)+'</b> <br> '+texti
