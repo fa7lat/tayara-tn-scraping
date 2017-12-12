@@ -32,4 +32,4 @@ pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/te
 Finally ,Create a file that stores your email crediantals and import it to the main script .
 Do Not forget to  add it to gitignore file , among the __pycache__ folder
 
-<img src="https://raw.githubusercontent.com/chemsseddine/tayara-tn-scraping/master/Screenshot.PNG">
+<img src="https://raw.githubusercontent.com/chemsseddine/tayara-tn-scraping/master/images/Screenshot.PNG">
