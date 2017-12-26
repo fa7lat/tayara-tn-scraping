@@ -7,6 +7,14 @@ This is a Python Script for web scraping on www.tayara.tn and sending email in h
 <li>Image</li>
 </ul>
 
+Dependencies
+============
+* pandas
+* bs4 
+* PIL
+* pytesseract
+
+
 # Notes 
 URL used for searching : term is the argument to precise when you execute the script via the terminal
 
@@ -31,5 +39,8 @@ pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/te
 
 Finally ,Create a file that stores your email crediantals and import it to the main script .
 Do Not forget to  add it to gitignore file , among the __pycache__ folder
+
+Email Example Screenshot
+============
 
 <img src="https://raw.githubusercontent.com/chemsseddine/tayara-tn-scraping/master/images/Screenshot.PNG">
